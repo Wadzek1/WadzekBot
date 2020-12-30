@@ -3,6 +3,7 @@ import os
 import requests
 import json
 import yaml
+import wikipedia
 
 client = discord.Client()
 
@@ -18,13 +19,6 @@ BAD_WORDS_DATA = yaml.safe_load(bad_word_file)
 bad_word_file.close()
 BAD_WORDS = BAD_WORDS_DATA["badWords"]
 
-# INFORMATIONEN_KIRI_PATH = "twitch_kiri.yml"
-# kiri_file = open(INFORMATIONEN_KIRI_PATH, "r")
-# kiriDaten = yaml.safe_load(top_hit)
-# kiri_daten = top_hit['is_live']
-# kiri_file.close()
-# KIRI_INFO_STRING = kiriDaten["istKiriLive"]
-# INFORMATIONEN_KIRI_PATH = kiri_daten
 
 def get_quote():
   response = requests.get("https://zenquotes.io/api/random")
@@ -32,9 +26,12 @@ def get_quote():
   quote = json_data[0] ["q"] + " -" + json_data[0] ["a"]
   return(quote)
 
+
 @client.event
 async def on_ready():
+  wikipedia.set_lang("de")
   print(f'We have logged in as {client.user}')
+
 
 @client.event
 async def on_message(message):
@@ -101,5 +98,21 @@ async def on_message(message):
       await message.channel.send("kiron ist live → https://kirimcplay.tv/twitch")
   elif msg_text.startswith("!wannwarderersteweltkrieg?"):
     await message.channel.send("Der erste Weltkrieg ging vom 28. Juli 1914 bis zum 11. November 1918")
+  elif msg_text.startswith("!wissen") and (len(msg_text.split(" ")) == 2):
+    search_term = msg_text.split(" ")[1]
+    summary = wikipedia.summary(search_term, sentences=2)
+    if len(summary) > 2000:
+      link = f"https://lmgtfy.app/#gsc.tab=0&gsc.q={search_term}"
+      await message.channel.send(f"Entschuldige, {message.author.mention}, die ERSTEN ZWEI SÄTZE der Wikipedia-Zusammenfassung ist schon zu lang für eine Discord-Nachricht.\n{link}")
+    else:
+      await message.channel.send(
+f"""\
+\
+**\
+Hier hast du die ersten zwei Sätze der Zusammenfassung für \
+"{search_term}"!\
+\
+**\n\n{summary}""")
+    
 
 client.run(os.getenv('DISCORD_TOKEN'))
