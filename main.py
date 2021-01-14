@@ -46,8 +46,32 @@ async def on_message(message):
     quote = get_quote()
     await message.channel.send(quote)
   elif msg_text.startswith("!poll"):
-    await message.add_reaction("1️⃣")
-    await message.add_reaction("2️⃣")
+    msg_text.split(" ")
+    number_of_options = msg_text[6]
+    number_of_options = int(number_of_options)
+
+    if number_of_options == 2:
+      await message.add_reaction("1️⃣")
+      await message.add_reaction("2️⃣")
+
+    if number_of_options == 3:
+      await message.add_reaction("1️⃣")
+      await message.add_reaction("2️⃣")
+      await message.add_reaction("3️⃣")
+
+    if number_of_options == 4:
+      await message.add_reaction("1️⃣")
+      await message.add_reaction("2️⃣")
+      await message.add_reaction("3️⃣")
+      await message.add_reaction("4️⃣")
+
+    if number_of_options == 5:
+      await message.add_reaction("1️⃣")
+      await message.add_reaction("2️⃣")
+      await message.add_reaction("3️⃣")
+      await message.add_reaction("4️⃣")
+      await message.add_reaction("5️⃣")
+
   elif any(word in msg_text for word in BAD_WORDS):
     await message.channel.send(MESSAGES["wortwahl"])
   elif msg_text.startswith("!machterfehler?"):
@@ -74,9 +98,9 @@ async def on_message(message):
     request = requests.get("https://api.twitch.tv/helix/search/channels", params=parameters, headers=headers)
     top_hit = request.json()["data"][0]
     await message.channel.send(f"""Top Hit on Twitch:
-    ```
-    {top_hit}
-    ```""") 
+```
+{top_hit}
+```""")
 
   elif msg_text.startswith("!istkirilive?"):
     oauth = os.getenv("TWITCH_OAUTH_TOKEN")
@@ -88,7 +112,7 @@ async def on_message(message):
 
     request = requests.get("https://api.twitch.tv/helix/search/channels", params=parameters, headers=headers)
     top_hit = request.json()["data"][0]
-    
+
     if not top_hit["is_live"]:
       await message.channel.send("kiron ist nicht live")
       await message.channel.send("Wenn Kiron streamt, kannst du ihn hier finden:")
@@ -113,6 +137,6 @@ Hier hast du die ersten zwei Sätze der Zusammenfassung für \
 "{search_term}"!\
 \
 **\n\n{summary}""")
-    
+
 
 client.run(os.getenv('DISCORD_TOKEN'))
