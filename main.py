@@ -93,15 +93,15 @@ async def on_message(message):
       if number_of_options >= 5:
         await message.add_reaction("5️⃣")
       if number_of_options >= 6:
-        await message.add_reaction("\u0036")
+        await message.add_reaction("6️⃣")
       if number_of_options >= 7:
-        await message.add_reaction("\u0037")
+        await message.add_reaction("7️⃣")
       if number_of_options >= 8:
-        await message.add_reaction("\u0038")
+        await message.add_reaction("8️⃣")
       if number_of_options >= 9:
-        await message.add_reaction("\u0039")
+        await message.add_reaction("9️⃣")
       if number_of_options >= 10:
-        await message.add_reaction("\U0001F51F")
+        await message.add_reaction("🔟")
     else:
       await message.channel.send("Du kannst 2-10 Optionen erstellen: `!poll <mengeAnOptionen>`")
       
