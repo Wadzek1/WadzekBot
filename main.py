@@ -80,31 +80,31 @@ async def on_message(message):
     await message.channel.send(quote)
 
   elif msg_text.startswith("!poll"):
-    msg_text.split(" ")
-    number_of_options = msg_text[6]
-    number_of_options = int(number_of_options)
-
-    if number_of_options == 2:
+    msg_parts = msg_text.split(" ")
+    number_of_options = int(msg_parts[1])
+    
+    if number_of_options in [2, 3, 4, 5, 6, 7, 8, 9, 10]:
       await message.add_reaction("1️⃣")
       await message.add_reaction("2️⃣")
-
-    if number_of_options == 3:
-      await message.add_reaction("1️⃣")
-      await message.add_reaction("2️⃣")
-      await message.add_reaction("3️⃣")
-
-    if number_of_options == 4:
-      await message.add_reaction("1️⃣")
-      await message.add_reaction("2️⃣")
-      await message.add_reaction("3️⃣")
-      await message.add_reaction("4️⃣")
-
-    if number_of_options == 5:
-      await message.add_reaction("1️⃣")
-      await message.add_reaction("2️⃣")
-      await message.add_reaction("3️⃣")
-      await message.add_reaction("4️⃣")
-      await message.add_reaction("5️⃣")
+      if number_of_options >= 3:
+        await message.add_reaction("3️⃣")
+      if number_of_options >= 4:
+        await message.add_reaction("4️⃣")
+      if number_of_options >= 5:
+        await message.add_reaction("5️⃣")
+      if number_of_options >= 6:
+        await message.add_reaction("\u0036")
+      if number_of_options >= 7:
+        await message.add_reaction("\u0037")
+      if number_of_options >= 8:
+        await message.add_reaction("\u0038")
+      if number_of_options >= 9:
+        await message.add_reaction("\u0039")
+      if number_of_options >= 10:
+        await message.add_reaction("\U0001F51F")
+    else:
+      await message.channel.send("Du kannst 2-10 Optionen erstellen: `!poll <mengeAnOptionen>`")
+      
 
   elif any(word in msg_text for word in BAD_WORDS):
     await message.channel.send(MESSAGES["wortwahl"])
