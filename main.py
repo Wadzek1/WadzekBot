@@ -25,12 +25,38 @@ BAD_WORDS_DATA = yaml.safe_load(bad_word_file)
 bad_word_file.close()
 BAD_WORDS = BAD_WORDS_DATA["badWords"]
 
+role_msg_id = 795005876112326683
 
 def get_quote():
   response = requests.get("https://zenquotes.io/api/random")
   json_data = json.loads(response.text)
   quote = json_data[0] ["q"] + " -" + json_data[0] ["a"]
   return(quote)
+
+
+@client.event
+async def on_reaction_add(reaction, reactor, message):
+  # https://discordpy.readthedocs.io/en/latest/api.html#reaction
+  message_reacted_on = reaction.message
+  message_id = message_reacted_on.id
+  reaction_emoji = reaction.emoji
+  reacted_by_me = reaction.me
+  if reacted_by_me:
+    return
+
+  if message_id == role_msg_id:
+    print("Die Nachricht mit command wurde erfolgreich erkannt")
+    print(message_reacted_on.id)
+    print(reaction_emoji)
+    print(reactor)
+
+
+@client.event
+async def on_reaction_remove(reaction, reactor):
+  message_reacted_on = reaction.message
+  reaction_emoji = reaction.emoji
+  reacted_by_me = reaction.me
+  print("hello")
 
 
 @client.event
@@ -143,5 +169,10 @@ Hier hast du die Zusammenfassung des Wikipedia-Artikels für \
       await message.channel.send(f"Tut mir leid, {message.author.mention}, dazu konnte ich keine Wikipedia-Seite finden.")
     except DisambiguationError:
       await message.channel.send(f"Tut mir leid, {message.author.mention}, dazu gibt es zu viele mögliche Einträge. Bitte versuche, dich etwas spezifischer auszudrücken.")
+
+  elif msg_text.startswith("!rollenzuteilung"):
+      message_with_command = message
+      role_msg_id = message_with_command.id
+      await message.channel.send(role_msg_id)
 
 client.run(os.getenv('DISCORD_TOKEN'))
