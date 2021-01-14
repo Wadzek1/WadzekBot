@@ -80,8 +80,31 @@ async def on_message(message):
     await message.channel.send(quote)
 
   elif msg_text.startswith("!poll"):
-    await message.add_reaction("1️⃣")
-    await message.add_reaction("2️⃣")
+    msg_text.split(" ")
+    number_of_options = msg_text[6]
+    number_of_options = int(number_of_options)
+
+    if number_of_options == 2:
+      await message.add_reaction("1️⃣")
+      await message.add_reaction("2️⃣")
+
+    if number_of_options == 3:
+      await message.add_reaction("1️⃣")
+      await message.add_reaction("2️⃣")
+      await message.add_reaction("3️⃣")
+
+    if number_of_options == 4:
+      await message.add_reaction("1️⃣")
+      await message.add_reaction("2️⃣")
+      await message.add_reaction("3️⃣")
+      await message.add_reaction("4️⃣")
+
+    if number_of_options == 5:
+      await message.add_reaction("1️⃣")
+      await message.add_reaction("2️⃣")
+      await message.add_reaction("3️⃣")
+      await message.add_reaction("4️⃣")
+      await message.add_reaction("5️⃣")
 
   elif any(word in msg_text for word in BAD_WORDS):
     await message.channel.send(MESSAGES["wortwahl"])
