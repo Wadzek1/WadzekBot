@@ -129,13 +129,13 @@ async def on_message(message):
 
       if len(summary) > 2000:
         link = f"https://lmgtfy.app/#gsc.tab=0&gsc.q={search_term}"
-        await message.channel.send(f"Entschuldige, {message.author.mention}, die ERSTEN DREI SÄTZE der Wikipedia-Zusammenfassung ist schon zu lang für eine Discord-Nachricht.\n{link}")
+        await message.channel.send(f"Entschuldige, {message.author.mention}, die ERSTEN DREI SÄTZE der Wikipedia-Zusammenfassung sind schon zu lang für eine Discord-Nachricht.\n{link}")
       else:
         await message.channel.send(
 f"""\
 \
 **\
-Hier hast du die ersten zwei Sätze der Zusammenfassung für \
+Hier hast du die Zusammenfassung des Wikipedia-Artikels für \
 "{search_term}"!\
 \
 **\n\n{summary}""")
