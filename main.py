@@ -46,9 +46,8 @@ async def on_message(message):
     quote = get_quote()
     await message.channel.send(quote)
   elif msg_text.startswith("!poll"):
-    msg_text.split(" ")
-    number_of_options = msg_text[6]
-    number_of_options = int(number_of_options)
+    msg_parts = msg_text.split(" ")
+    number_of_options = int(msg_parts[1])
 
     if number_of_options == 2:
       await message.add_reaction("1️⃣")
