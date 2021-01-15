@@ -5,6 +5,12 @@ import json
 import yaml
 import wikipedia
 
+import warnings
+warnings.filterwarnings("ignore")  # This ignores the stupid wikipedia warning no one likes or even cares about that isn't actually from wikipedia but only shows because the wikipedia module doesn't ignore so we need to do it with this two liner that is way too long because of this stupid comment but I am pretty mad at the devs of the wikipedia module for this that's why I am writing so much k thx bye
+
+from wikipedia.exceptions import PageError
+from wikipedia.exceptions import DisambiguationError
+
 client = discord.Client()
 
 MESSAGE_PATH = "messages.yml"
@@ -74,9 +80,9 @@ async def on_message(message):
     request = requests.get("https://api.twitch.tv/helix/search/channels", params=parameters, headers=headers)
     top_hit = request.json()["data"][0]
     await message.channel.send(f"""Top Hit on Twitch:
-    ```
-    {top_hit}
-    ```""") 
+```
+{top_hit}
+```""")
 
   elif msg_text.startswith("!istkirilive?"):
     oauth = os.getenv("TWITCH_OAUTH_TOKEN")
@@ -88,24 +94,35 @@ async def on_message(message):
 
     request = requests.get("https://api.twitch.tv/helix/search/channels", params=parameters, headers=headers)
     top_hit = request.json()["data"][0]
-    
+
     if not top_hit["is_live"]:
       await message.channel.send("kiron ist nicht live")
       await message.channel.send("Wenn Kiron streamt, kannst du ihn hier finden:")
       await message.channel.send("https://twitch.tv/kirimctwitch")
-      await message.channel.send(top_hit["thumbnail_url"])
     else:
       await message.channel.send("kiron ist live → https://kirimcplay.tv/twitch")
   elif msg_text.startswith("!wannwarderersteweltkrieg?"):
     await message.channel.send("Der erste Weltkrieg ging vom 28. Juli 1914 bis zum 11. November 1918")
   elif msg_text.startswith("!wissen") and (len(msg_text.split(" ")) == 2):
-    search_term = msg_text.split(" ")[1]
-    summary = wikipedia.summary(search_term, sentences=2)
-    if len(summary) > 2000:
-      link = f"https://lmgtfy.app/#gsc.tab=0&gsc.q={search_term}"
-      await message.channel.send(f"Entschuldige, {message.author.mention}, die ERSTEN ZWEI SÄTZE der Wikipedia-Zusammenfassung ist schon zu lang für eine Discord-Nachricht.\n{link}")
-    else:
-      await message.channel.send(
+    try:
+      search_term = msg_text.split(" ")[1]
+      summary = wikipedia.summary(search_term)
+      summary_parts = summary.split(". ")
+
+      if len(summary_parts) >= 3:
+        summary = f"{summary_parts[0]}.   {summary_parts[1]}. {summary_parts[2]}."
+      elif len(summary_parts) == 2:
+        summary = f"{summary_parts[0]}. {summary_parts[1]}."
+      elif len(summary_parts) == 1:
+        summary = f"{summary_parts[0]}."
+      else:
+        message.channel.send("Tut mir leid, {message.author.mention}, dazu konnte ich keine Zusammenfassung finden")
+
+      if len(summary) > 2000:
+        link = f"https://lmgtfy.app/#gsc.tab=0&gsc.q={search_term}"
+        await message.channel.send(f"Entschuldige, {message.author.mention}, die ERSTEN DREI SÄTZE der Wikipedia-Zusammenfassung ist schon zu lang für eine Discord-Nachricht.\n{link}")
+      else:
+        await message.channel.send(
 f"""\
 \
 **\
@@ -113,6 +130,9 @@ Hier hast du die ersten zwei Sätze der Zusammenfassung für \
 "{search_term}"!\
 \
 **\n\n{summary}""")
-    
+    except PageError:
+      await message.channel.send(f"Tut mir leid, {message.author.mention}, dazu konnte ich keine Wikipedia-Seite finden.")
+    except DisambiguationError:
+      await message.channel.send(f"Tut mir leid, {message.author.mention}, dazu gibt es zu viele mögliche Einträge. Bitte versuche, dich etwas spezifischer auszudrücken.")
 
 client.run(os.getenv('DISCORD_TOKEN'))
