@@ -82,7 +82,7 @@ async def on_message(message):
   elif msg_text.startswith("!poll"):
     msg_parts = msg_text.split(" ")
     number_of_options = int(msg_parts[1])
-    
+
     if number_of_options in [2, 3, 4, 5, 6, 7, 8, 9, 10]:
       await message.add_reaction("1️⃣")
       await message.add_reaction("2️⃣")
@@ -104,7 +104,9 @@ async def on_message(message):
         await message.add_reaction("🔟")
     else:
       await message.channel.send("Du kannst 2-10 Optionen erstellen: `!poll <mengeAnOptionen>`")
-      
+
+      if allow_abstain_vote:
+          await message.add_reaction("😶")  # Emoji can be changed, but I thougt the lack of expression on the face fits to abstaining ~kiriDevs
 
   elif any(word in msg_text for word in BAD_WORDS):
     await message.channel.send(MESSAGES["wortwahl"])
@@ -188,6 +190,7 @@ Hier hast du die Zusammenfassung des Wikipedia-Artikels für \
 "{search_term}"!\
 \
 **\n\n{summary}""")
+
     except PageError:
       await message.channel.send(f"Tut mir leid, {message.author.mention}, dazu konnte ich keine Wikipedia-Seite finden.")
     except DisambiguationError:
