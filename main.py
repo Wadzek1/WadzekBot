@@ -48,6 +48,7 @@ async def on_message(message):
   elif msg_text.startswith("!poll"):
     msg_parts = msg_text.split(" ")
     number_of_options = int(msg_parts[1])
+    allow_abstain_vote = msg_parts[2] in ["true", "yes", "1", "allow"]
 
     if number_of_options == 2:
       await message.add_reaction("1️⃣")
@@ -70,6 +71,9 @@ async def on_message(message):
       await message.add_reaction("3️⃣")
       await message.add_reaction("4️⃣")
       await message.add_reaction("5️⃣")
+
+      if allow_abstain_vote:
+          await message.add_reaction("😶")  # Emoji can be changed, but I thougt the lack of expression on the face fits to abstaining ~kiriDevs
 
   elif any(word in msg_text for word in BAD_WORDS):
     await message.channel.send(MESSAGES["wortwahl"])
