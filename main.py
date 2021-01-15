@@ -48,23 +48,30 @@ async def on_message(message):
 
   if msg_text.startswith('!hello'):
     await message.channel.send(HELLO_WORLD_STRING)
+
   elif msg_text.startswith("!inspiration"):
     quote = get_quote()
     await message.channel.send(quote)
+
   elif msg_text.startswith("!poll"):
     await message.add_reaction("1️⃣")
     await message.add_reaction("2️⃣")
+
   elif any(word in msg_text for word in BAD_WORDS):
     await message.channel.send(MESSAGES["wortwahl"])
+
   elif msg_text.startswith("!machterfehler?"):
     await message.channel.send("Ich mache keine Fehler, " + message.author.mention)
+
   elif msg_text.startswith("!quit"):
+
     if message.author.id in [323196084413267974, 277159146565009408]:
       await message.channel.send(f"Tschüß, {message.author.mention}!")
       await client.close()
       exit(0)
     else:
       await message.channel.send(f"Das darfst du nicht, {message.author.mention}!")
+
   elif msg_text.startswith("!info"):
     await message.channel.send("Hier sind Informationen über mich, du minderwertiges Stück Kohlenstoff:")
     await message.channel.send("https://wiki.coldmirror.net/wiki/A.R.S.C.H_9000")
@@ -101,8 +108,10 @@ async def on_message(message):
       await message.channel.send("https://twitch.tv/kirimctwitch")
     else:
       await message.channel.send("kiron ist live → https://kirimcplay.tv/twitch")
+
   elif msg_text.startswith("!wannwarderersteweltkrieg?"):
     await message.channel.send("Der erste Weltkrieg ging vom 28. Juli 1914 bis zum 11. November 1918")
+
   elif msg_text.startswith("!wissen") and (len(msg_text.split(" ")) == 2):
     try:
       search_term = msg_text.split(" ")[1]
