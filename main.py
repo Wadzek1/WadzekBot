@@ -80,8 +80,33 @@ async def on_message(message):
     await message.channel.send(quote)
 
   elif msg_text.startswith("!poll"):
-    await message.add_reaction("1️⃣")
-    await message.add_reaction("2️⃣")
+    msg_parts = msg_text.split(" ")
+    number_of_options = int(msg_parts[1])
+
+    if number_of_options in [2, 3, 4, 5, 6, 7, 8, 9, 10]:
+      await message.add_reaction("1️⃣")
+      await message.add_reaction("2️⃣")
+      if number_of_options >= 3:
+        await message.add_reaction("3️⃣")
+      if number_of_options >= 4:
+        await message.add_reaction("4️⃣")
+      if number_of_options >= 5:
+        await message.add_reaction("5️⃣")
+      if number_of_options >= 6:
+        await message.add_reaction("6️⃣")
+      if number_of_options >= 7:
+        await message.add_reaction("7️⃣")
+      if number_of_options >= 8:
+        await message.add_reaction("8️⃣")
+      if number_of_options >= 9:
+        await message.add_reaction("9️⃣")
+      if number_of_options >= 10:
+        await message.add_reaction("🔟")
+    else:
+      await message.channel.send("Du kannst 2-10 Optionen erstellen: `!poll <mengeAnOptionen>`")
+
+      if allow_abstain_vote:
+          await message.add_reaction("😶")  # Emoji can be changed, but I thougt the lack of expression on the face fits to abstaining ~kiriDevs
 
   elif any(word in msg_text for word in BAD_WORDS):
     await message.channel.send(MESSAGES["wortwahl"])
@@ -165,6 +190,7 @@ Hier hast du die Zusammenfassung des Wikipedia-Artikels für \
 "{search_term}"!\
 \
 **\n\n{summary}""")
+
     except PageError:
       await message.channel.send(f"Tut mir leid, {message.author.mention}, dazu konnte ich keine Wikipedia-Seite finden.")
     except DisambiguationError:
